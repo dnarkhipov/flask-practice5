@@ -1,10 +1,11 @@
 from flask import Flask, render_template, send_from_directory, redirect, url_for, request
 from project5.extensions import db, migrate
 
+from project5.settings import ProdConfig
 from project5 import main
 
 
-def create_app():
+def create_app(config_object=ProdConfig):
     """An application factory, as explained here:
     http://flask.pocoo.org/docs/patterns/appfactories/.
 
@@ -14,6 +15,8 @@ def create_app():
 
     # If a rule ends with a slash but the matched URL does not, redirect to the URL with a trailing slash.
     app.url_map.strict_slashes = False
+
+    app.config.from_object(config_object)
     register_extensions(app)
     register_blueprints(app)
     return app
