@@ -16,7 +16,7 @@ class ProdConfig(Config):
 
     ENV = 'prod'
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project4.db'
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project5.db'
 
 
 class DevConfig(Config):
@@ -24,7 +24,7 @@ class DevConfig(Config):
 
     ENV = 'dev'
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project4.db'
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project5.db'
 
 
 class TestConfig(Config):
@@ -32,4 +32,4 @@ class TestConfig(Config):
 
     TESTING = True
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project4.db'
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project5.db'
