@@ -21,7 +21,7 @@
             <div class="card-body">
               <h4 class="h5 card-title">{{ meal.title }}<br> <b>{{ meal.price }} руб.</b></h4>
               <p class="card-text">{{ meal.description }}</p>
-              <a href="/addtocart/" class="btn btn-danger">В корзину</a>
+              <a href="/addtocart/{{ meal.id }}" class="btn btn-danger">В корзину</a>
             </div>
           </div>
         </div>
