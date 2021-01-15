@@ -25,6 +25,7 @@ class DevConfig(Config):
     ENV = 'dev'
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = f'sqlite:///{Config.PROJECT_ROOT}/data/project5.db'
+    SQLALCHEMY_ECHO = True
 
 
 class TestConfig(Config):
