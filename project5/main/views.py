@@ -11,12 +11,24 @@ def read_session_cart() -> list:
     cart = session.get('cart')
     return list() if cart is None or len(cart) == 0 else cart.split(',')
 
-
 # беседа по поводу включения/исключения static-контента в blueprint
 # https://twitter.com/ilCiclotrone/status/1350077793183412228
 
 
 blueprint = Blueprint('main', __name__, template_folder='templates')
+
+
+@blueprint.app_template_filter('count_formatter')
+def count_formatter(count: int):
+    # примитивное склонение слова 'блюдо' в зависимости от количества
+    if count in [1, 21, 31]:
+        s_patch = 'блюдо'
+    elif count in [2, 3, 4, 22, 23, 24]:
+        s_patch = 'блюда'
+    else:
+        s_patch = 'блюд'
+
+    return f'{count} {s_patch}'
 
 
 @blueprint.route('/')
