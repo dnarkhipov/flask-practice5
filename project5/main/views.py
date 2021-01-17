@@ -1,4 +1,5 @@
 """Main site views."""
+import json
 import random
 from flask import Blueprint, render_template, redirect, url_for, session
 
@@ -54,6 +55,9 @@ def remove_from_cart(meal_id):
     if len(cart) > 0:
         try:
             cart.remove(meal_id)
+            meal = Meal.query.get(meal_id)
+            if meal is not None:
+                session['last_removed'] = dict(id=meal.id, title=meal.title)
         except ValueError:
             pass
     session['cart'] = ','.join(cart)
@@ -65,7 +69,11 @@ def remove_from_cart(meal_id):
 def get_cart():
     cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
 
+    last_removed = session.pop('last_removed', None)
+
     return render_template(
         'cart.html',
-        cart_meals=cart_meals
+        cart_meals=cart_meals,
+        customer=None,
+        last_removed=last_removed
     )
