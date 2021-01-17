@@ -18,10 +18,10 @@
         <div class="col-12 col-md-4 d-flex align-items-stretch">
           <div class="card mb-3">
             <img src={{ url_for('static', filename='pictures/' + meal.picture) }} width="300" class="card-img-top" alt="{{ meal.title }}">
-            <div class="card-body">
+            <div class="card-body d-flex flex-column">
               <h4 class="h5 card-title">{{ meal.title }}<br> <b>{{ meal.price }} руб.</b></h4>
               <p class="card-text">{{ meal.description }}</p>
-              <a href="{{ url_for('main.add_to_cart', meal_id=meal.id) }}" class="btn btn-danger">В корзину</a>
+              <a href="{{ url_for('main.add_to_cart', meal_id=meal.id) }}" class="btn btn-primary mt-auto">В корзину</a>
             </div>
           </div>
         </div>

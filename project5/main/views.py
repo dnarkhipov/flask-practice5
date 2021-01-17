@@ -5,9 +5,14 @@ from flask import Blueprint, render_template, redirect, url_for, session
 from .models import Category, Meal
 
 
+# читаем список продуктов в корзине из session
 def read_session_cart() -> list:
     cart = session.get('cart')
     return list() if cart is None or len(cart) == 0 else cart.split(',')
+
+
+# беседа по поводу включения/исключения static-контента в blueprint
+# https://twitter.com/ilCiclotrone/status/1350077793183412228
 
 
 blueprint = Blueprint('main', __name__, template_folder='templates')
