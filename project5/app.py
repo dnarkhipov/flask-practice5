@@ -2,7 +2,7 @@ from flask import Flask, render_template, send_from_directory, redirect, url_for
 from project5.extensions import db, migrate
 
 from project5.settings import ProdConfig
-from project5 import main
+from project5 import showcase, customers
 
 
 def create_app(config_object=ProdConfig):
@@ -30,4 +30,5 @@ def register_extensions(app):
 
 def register_blueprints(app):
     """Register Flask blueprints."""
-    app.register_blueprint(main.views.blueprint, url_prefix='')
+    app.register_blueprint(showcase.views.blueprint, url_prefix='')
+    app.register_blueprint(customers.views.blueprint, url_prefix='')

@@ -11,7 +11,7 @@ from sqlalchemy import orm
 
 import csv
 from collections import namedtuple
-from project5.main.models import Category, Meal
+from project5.showcase.models import Category, Meal
 
 
 # revision identifiers, used by Alembic.

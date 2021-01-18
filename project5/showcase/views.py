@@ -15,7 +15,7 @@ def read_session_cart() -> list:
 # https://twitter.com/ilCiclotrone/status/1350077793183412228
 
 
-blueprint = Blueprint('main', __name__, template_folder='templates')
+blueprint = Blueprint('showcase', __name__, template_folder='templates')
 
 
 @blueprint.app_template_filter('count_formatter')
@@ -58,7 +58,7 @@ def add_to_cart(meal_id):
     cart.add(meal_id)
     session['cart'] = ','.join(list(cart))
 
-    return redirect(url_for('main.get_cart'))
+    return redirect(url_for('showcase.get_cart'))
 
 
 @blueprint.route('/removefromcart/<meal_id>')
@@ -74,7 +74,7 @@ def remove_from_cart(meal_id):
             pass
     session['cart'] = ','.join(cart)
 
-    return redirect(url_for('main.get_cart'))
+    return redirect(url_for('showcase.get_cart'))
 
 
 @blueprint.route('/cart')

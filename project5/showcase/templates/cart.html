@@ -5,11 +5,11 @@
         <h1 class="h3 my-4">Корзина</h1>
 
         {% if not customer %}
-            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="/login.html">войдите</a> или <a
-                    href="/register.html">зарегистрируйтесь</a></div>
+            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="{{ url_for('customer.auth') }}">войдите</a> или <a
+                    href="{{ url_for('customer.register') }}">зарегистрируйтесь</a></div>
         {% endif %}
         {% if last_removed %}
-            <div class="alert alert-warning" role="alert"><a href="{{ url_for('main.add_to_cart', meal_id=last_removed.id) }}">Отменить</a> удаление из корзины: {{ last_removed.title }}</div>
+            <div class="alert alert-warning" role="alert"><a href="{{ url_for('showcase.add_to_cart', meal_id=last_removed.id) }}">Отменить</a> удаление из корзины: {{ last_removed.title }}</div>
         {% endif %}
 
         <div class="row mt-5">
@@ -42,7 +42,9 @@
                             <input type="hidden" value="875" name="order_summ">
                             <input type="hidden" value="[1,3,4]" name="order_cart">
                         </div>
+                        {% if customer %}
                         <button type="submit" class=" mt-3 mb-5 btn btn-primary">Оформить заказ</button>
+                        {% endif %}
                     </fieldset>
                 </form>
             </div>
@@ -57,7 +59,7 @@
                             <td></td>
                             <td>1</td>
                             <td>{{ meal.price }}</td>
-                            <td><a class="text-danger" href="{{ url_for('main.remove_from_cart', meal_id=meal.id) }}">Удалить</a>
+                            <td><a class="text-danger" href="{{ url_for('showcase.remove_from_cart', meal_id=meal.id) }}">Удалить</a>
                             </td>
                         </tr>
                     {% endfor %}
