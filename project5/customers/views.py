@@ -1,24 +1,45 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, session
 from sqlalchemy.exc import DBAPIError
-from flask_jwt_extended import jwt_required, jwt_optional, create_access_token, current_user
 
-from project5.database import db
-from .forms import RegisterForm
+from project5.extensions import db
+from .forms import AuthForm, RegisterForm
 from .models import Customer
 
 
-blueprint = Blueprint('customer', __name__, template_folder='templates')
+def get_current_customer():
+    customer_id = session.get('customer_id', None)
+    if customer_id:
+        customer = Customer.query.get(customer_id)
+    else:
+        customer = None
+    return customer
+
+
+blueprint = Blueprint('customers', __name__, template_folder='templates')
 
 
 @blueprint.route('/auth', methods=('get', 'post'))
 def auth():
+    form = AuthForm()
+
+    if request.method == 'POST':
+        if form.validate():
+            customer = Customer.query.filter_by(mail=form.mail.data).first()
+            if customer is not None and customer.check_password(form.password.data):
+                session['customer_id'] = customer.id
+                return redirect(url_for('showcase.get_main_page'))
+            else:
+                pass
+
     return render_template(
-        'auth.html'
+        'auth.html',
+        form=form
     )
 
 
 @blueprint.route('/logout')
 def logout():
+    session.pop('customer_id', None)
     return redirect(url_for('showcase.get_main_page'))
 
 
@@ -34,7 +55,7 @@ def register():
                 db.session.commit()
             except DBAPIError as err:
                 return f'Internal DBAPI error: {err}', 500
-            create_access_token(identity=customer, fresh=True)
+            session['customer_id'] = customer.id
             return redirect(url_for('showcase.get_main_page'))
 
     return render_template(

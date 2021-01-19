@@ -5,8 +5,8 @@
         <h1 class="h3 my-4">Корзина</h1>
 
         {% if not customer %}
-            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="{{ url_for('customer.auth') }}">войдите</a> или <a
-                    href="{{ url_for('customer.register') }}">зарегистрируйтесь</a></div>
+            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="{{ url_for('customers.auth') }}">войдите</a> или <a
+                    href="{{ url_for('customers.register') }}">зарегистрируйтесь</a></div>
         {% endif %}
         {% if last_removed %}
             <div class="alert alert-warning" role="alert"><a href="{{ url_for('showcase.add_to_cart', meal_id=last_removed.id) }}">Отменить</a> удаление из корзины: {{ last_removed.title }}</div>

@@ -3,7 +3,9 @@ import json
 import random
 from flask import Blueprint, render_template, redirect, url_for, session
 
+from project5.customers import get_current_customer
 from .models import Category, Meal
+from .forms import OrderForm
 
 
 # читаем список продуктов в корзине из session
@@ -42,11 +44,13 @@ def get_main_page():
         menu = {'новинки': promo, **menu}
 
     cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
+    customer = get_current_customer()
 
     return render_template(
         'index.html',
         menu=menu,
-        cart_meals=cart_meals
+        cart_meals=cart_meals,
+        customer=customer
     )
 
 
@@ -77,15 +81,17 @@ def remove_from_cart(meal_id):
     return redirect(url_for('showcase.get_cart'))
 
 
-@blueprint.route('/cart')
+@blueprint.route('/cart', methods=('get', 'post'))
 def get_cart():
-    cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
+    form = OrderForm()
 
+    cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
     last_removed = session.pop('last_removed', None)
+    customer = get_current_customer()
 
     return render_template(
         'cart.html',
         cart_meals=cart_meals,
-        customer=None,
+        customer=customer,
         last_removed=last_removed
     )

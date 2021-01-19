@@ -1,19 +1,18 @@
 from datetime import datetime
-from project5.database import db, Model, Column
-from project5.extensions import bcrypt
+from project5.extensions import db, bcrypt
 
 
-class Customer(Model):
+class Customer(db.Model):
     __tablename__ = 'customers'
-    id = Column(db.Integer, primary_key=True)
-    mail = Column(db.String(80), unique=True, nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    mail = db.Column(db.String(80), unique=True, nullable=False)
     # пароль хранится как bcrypt-hash
-    password = Column(db.Binary(128), nullable=False)
+    password = db.Column(db.Binary(128), nullable=False)
     orders = db.relationship("Order", back_populates="customer")
 
     def __init__(self, mail, password=None, **kwargs):
         """Create instance."""
-        Model.__init__(self, mail=mail, **kwargs)
+        db.Model.__init__(self, mail=mail, **kwargs)
         if password:
             self.set_password(password)
         else:
@@ -32,9 +31,9 @@ class Customer(Model):
         return f'<Customer({self.mail})>'
 
 
-class Order(Model):
+class Order(db.Model):
     __tablename__ = 'orders'
-    id = Column(db.Integer, primary_key=True)
-    customer_id = Column(db.Integer, db.ForeignKey("customers.id"), nullable=False)
-    create_dt = Column(db.DateTime, nullable=False, default=datetime.now())
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey("customers.id"), nullable=False)
+    create_dt = db.Column(db.DateTime, nullable=False, default=datetime.now())
     customer = db.relationship("Customer", back_populates="orders")

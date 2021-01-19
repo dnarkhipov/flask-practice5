@@ -1,19 +1,19 @@
-from project5.database import db, Model, Column
+from project5.extensions import db
 
 
-class Category(Model):
+class Category(db.Model):
     __tablename__ = 'categories'
-    id = Column(db.Integer, primary_key=True)
-    title = Column(db.String(80), nullable=False, unique=True)
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80), nullable=False, unique=True)
     meals = db.relationship('Meal', uselist=True, back_populates="category")
 
 
-class Meal(Model):
+class Meal(db.Model):
     __tablename__ = 'meals'
-    id = Column(db.Integer, primary_key=True)
-    category_id = Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)
-    title = Column(db.String(80), nullable=False)
-    price = Column(db.Integer, nullable=False)
-    description = Column(db.String(250), nullable=False)
-    picture = Column(db.String(80), nullable=False)
+    id = db.Column(db.Integer, primary_key=True)
+    category_id = db.Column(db.Integer, db.ForeignKey("categories.id"), nullable=False)
+    title = db.Column(db.String(80), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(250), nullable=False)
+    picture = db.Column(db.String(80), nullable=False)
     category = db.relationship("Category", back_populates="meals")

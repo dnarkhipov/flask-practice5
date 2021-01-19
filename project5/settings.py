@@ -9,9 +9,6 @@ class Config(object):
     APP_DIR = Path(__file__).parent  # This directory
     PROJECT_ROOT = APP_DIR.parent
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_AUTH_USERNAME_KEY = 'email'
-    JWT_AUTH_HEADER_PREFIX = 'Token'
-    JWT_HEADER_TYPE = 'Token'
 
 
 class ProdConfig(Config):
