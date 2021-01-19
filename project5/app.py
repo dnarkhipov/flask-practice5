@@ -1,8 +1,12 @@
 from flask import Flask, render_template, send_from_directory, redirect, url_for, request
-from project5.extensions import db, migrate
+from flask_wtf.csrf import CSRFProtect
+from project5.extensions import db, migrate, bcrypt, jwt
 
 from project5.settings import ProdConfig
 from project5 import showcase, customers
+
+
+csrf = CSRFProtect()
 
 
 def create_app(config_object=ProdConfig):
@@ -26,6 +30,9 @@ def register_extensions(app):
     """Register Flask extensions."""
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
+    bcrypt.init_app(app)
+    jwt.init_app(app)
 
 
 def register_blueprints(app):
