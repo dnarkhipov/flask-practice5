@@ -1,3 +1,5 @@
+from typing import Optional
+
 from flask import Blueprint, render_template, redirect, url_for, request, session
 from sqlalchemy.exc import DBAPIError
 
@@ -6,13 +8,17 @@ from .forms import AuthForm, RegisterForm
 from .models import Customer
 
 
-def get_current_customer():
+def set_current_customer(customer_id):
+    session['customer_id'] = customer_id
+
+
+def unset_current_customer():
+    session.pop('customer_id', None)
+
+
+def get_current_customer() -> Optional[Customer]:
     customer_id = session.get('customer_id', None)
-    if customer_id:
-        customer = Customer.query.get(customer_id)
-    else:
-        customer = None
-    return customer
+    return Customer.query.get(customer_id) if customer_id else None
 
 
 blueprint = Blueprint('customers', __name__, template_folder='templates')
@@ -26,7 +32,7 @@ def auth():
         if form.validate():
             customer = Customer.query.filter_by(mail=form.mail.data).first()
             if customer is not None and customer.check_password(form.password.data):
-                session['customer_id'] = customer.id
+                set_current_customer(customer.id)
                 return redirect(url_for('showcase.get_main_page'))
             else:
                 pass
@@ -39,7 +45,7 @@ def auth():
 
 @blueprint.route('/logout')
 def logout():
-    session.pop('customer_id', None)
+    unset_current_customer()
     return redirect(url_for('showcase.get_main_page'))
 
 
@@ -55,7 +61,7 @@ def register():
                 db.session.commit()
             except DBAPIError as err:
                 return f'Internal DBAPI error: {err}', 500
-            session['customer_id'] = customer.id
+            set_current_customer(customer.id)
             return redirect(url_for('showcase.get_main_page'))
 
     return render_template(

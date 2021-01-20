@@ -83,14 +83,16 @@ def remove_from_cart(meal_id):
 
 @blueprint.route('/cart', methods=('get', 'post'))
 def get_cart():
-    form = OrderForm()
-
     cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
     last_removed = session.pop('last_removed', None)
     customer = get_current_customer()
+    form = OrderForm()
+    if customer:
+        form.mail.data = customer.mail
 
     return render_template(
         'cart.html',
+        form=form,
         cart_meals=cart_meals,
         customer=customer,
         last_removed=last_removed
