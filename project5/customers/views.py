@@ -33,7 +33,7 @@ def auth():
             customer = Customer.query.filter_by(mail=form.mail.data).first()
             if customer is not None and customer.check_password(form.password.data):
                 set_current_customer(customer.id)
-                return redirect(url_for('showcase.get_main_page'))
+                return redirect(url_for('showcase.get_account_page'))
             else:
                 pass
 
@@ -62,16 +62,9 @@ def register():
             except DBAPIError as err:
                 return f'Internal DBAPI error: {err}', 500
             set_current_customer(customer.id)
-            return redirect(url_for('showcase.get_main_page'))
+            return redirect(url_for('showcase.get_account_page'))
 
     return render_template(
         'register.html',
         form=form
-    )
-
-
-@blueprint.route('/account')
-def get_account_page():
-    return render_template(
-        'account.html'
     )

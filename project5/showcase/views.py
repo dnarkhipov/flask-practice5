@@ -1,10 +1,12 @@
 """Main site views."""
-import json
 import random
-from flask import Blueprint, render_template, redirect, url_for, session
+from flask import Blueprint, render_template, redirect, url_for, session, request
+from sqlalchemy.exc import DBAPIError
+import babel
 
+from project5.extensions import db
 from project5.customers import get_current_customer
-from .models import Category, Meal
+from .models import Category, Meal, Order
 from .forms import OrderForm
 
 
@@ -31,6 +33,12 @@ def count_formatter(count: int):
         s_patch = 'блюд'
 
     return f'{count} {s_patch}'
+
+
+@blueprint.app_template_filter('datetime_formatter')
+def format_datetime(value):
+    # форматирование даты для списка заказов. формат не изменяется
+    return babel.dates.format_datetime(value, 'd MMMM YYYY, HH:mm', locale='ru')
 
 
 @blueprint.route('/')
@@ -83,12 +91,29 @@ def remove_from_cart(meal_id):
 
 @blueprint.route('/cart', methods=('get', 'post'))
 def get_cart():
-    cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
-    last_removed = session.pop('last_removed', None)
-    customer = get_current_customer()
     form = OrderForm()
-    if customer:
-        form.mail.data = customer.mail
+    cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
+    customer = get_current_customer()
+
+    if request.method == 'POST':
+        if form.validate():
+            order = Order()
+            form.populate_obj(order)
+            order.total = sum(m.price for m in cart_meals)
+            order.meals = cart_meals
+            db.session.add(order)
+            try:
+                db.session.commit()
+            except DBAPIError as err:
+                return f'Internal DBAPI error: {err}', 500
+            # при успешном оформлении заказа очищаем корзину
+            session['cart'] = None
+            return redirect(url_for('showcase.get_account_page'))
+    else:
+        if customer:
+            form.mail.data = customer.mail
+
+    last_removed = session.pop('last_removed', None)
 
     return render_template(
         'cart.html',
@@ -96,4 +121,21 @@ def get_cart():
         cart_meals=cart_meals,
         customer=customer,
         last_removed=last_removed
+    )
+
+
+@blueprint.route('/account')
+def get_account_page():
+    customer = get_current_customer()
+    if customer is None:
+        return redirect(url_for('customers.auth'))
+
+    cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
+    orders = Order.query.filter(Order.mail == customer.mail).all()
+
+    return render_template(
+        'account.html',
+        cart_meals=cart_meals,
+        customer=customer,
+        orders=orders
     )

@@ -22,8 +22,8 @@ class Meal(db.Model):
 
 order_meals = db.Table(
     'order_meals',
-    db.Column('order_id', db.Integer, db.ForeignKey('meals.id'), nullable=False),
-    db.Column('meal_id', db.Integer, db.ForeignKey('orders.id'), nullable=False)
+    db.Column('order_id', db.Integer, db.ForeignKey('orders.id'), nullable=False),
+    db.Column('meal_id', db.Integer, db.ForeignKey('meals.id'), nullable=False)
 )
 
 

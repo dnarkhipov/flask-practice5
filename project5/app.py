@@ -33,6 +33,7 @@ def register_extensions(app):
     admin.init_app(app)
     admin.add_views(admin_customers)
 
+
 def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(showcase.views.blueprint, url_prefix='')

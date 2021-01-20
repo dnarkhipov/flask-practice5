@@ -5,40 +5,40 @@
         <h1 class="h3 my-4">Корзина</h1>
 
         {% if not customer %}
-            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a href="{{ url_for('customers.auth') }}">войдите</a> или <a
+            <div class="alert alert-warning" role="alert">Чтобы сделать заказ – <a
+                    href="{{ url_for('customers.auth') }}">войдите</a> или <a
                     href="{{ url_for('customers.register') }}">зарегистрируйтесь</a></div>
         {% endif %}
         {% if last_removed %}
-            <div class="alert alert-warning" role="alert"><a href="{{ url_for('showcase.add_to_cart', meal_id=last_removed.id) }}">Отменить</a> удаление из корзины: {{ last_removed.title }}</div>
+            <div class="alert alert-warning" role="alert"><a
+                    href="{{ url_for('showcase.add_to_cart', meal_id=last_removed.id) }}">Отменить</a> удаление из
+                корзины: {{ last_removed.title }}</div>
         {% endif %}
 
         <div class="row mt-5">
             <div class="col-4">
-                <form action="/cart/" method="POST">
+                <form action="{{ url_for('showcase.get_cart') }}" method="POST">
                     <fieldset {% if not customer %}disabled{% endif %}>
                         <h4 class="">Ваши данные</h4>
-                    {{ form.csrf_token }}
-                <div class="mt-4 order-md-1 form-label-group">
-                    {{ form.name.label }}
-                    {{ form.name(class='font-weight-bold form-control', autofocus=True) }}
-                </div>
-                <div class="mt-4 order-md-1 form-label-group">
-                    {{ form.address.label }}
-                    {{ form.address(class='font-weight-bold form-control') }}
-                </div>
-                <div class="mt-4 order-md-1 form-label-group">
-                    {{ form.mail.label }}
-                    {{ form.mail(class='font-weight-bold form-control') }}
-                </div>
-                <div class="mt-4 order-md-1 form-label-group">
-                    {{ form.phone.label }}
-                    {{ form.phone(class='font-weight-bold form-control') }}
-                </div>
-
-                            <input type="hidden" value="875" name="order_summ">
-                            <input type="hidden" value="[1,3,4]" name="order_cart">
+                        {{ form.csrf_token }}
+                        <div class="mt-4 order-md-1 form-label-group">
+                            {{ form.name.label }}
+                            {{ form.name(class='font-weight-bold form-control', autofocus=True) }}
+                        </div>
+                        <div class="mt-4 order-md-2 form-label-group">
+                            {{ form.address.label }}
+                            {{ form.address(class='font-weight-bold form-control') }}
+                        </div>
+                        <div class="mt-4 order-md-3 form-label-group">
+                            {{ form.mail.label }}
+                            {{ form.mail(class='font-weight-bold form-control', readonly=true) }}
+                        </div>
+                        <div class="mt-4 order-md-4 form-label-group">
+                            {{ form.phone.label }}
+                            {{ form.phone(class='font-weight-bold form-control') }}
+                        </div>
                         {% if customer %}
-                        <button type="submit" class=" mt-3 mb-5 btn btn-primary">Оформить заказ</button>
+                            <button type="submit" class=" mt-5 mb-5 btn btn-primary">Оформить заказ</button>
                         {% endif %}
                     </fieldset>
                 </form>
@@ -54,7 +54,8 @@
                             <td></td>
                             <td>1</td>
                             <td>{{ meal.price }}</td>
-                            <td><a class="text-danger" href="{{ url_for('showcase.remove_from_cart', meal_id=meal.id) }}">Удалить</a>
+                            <td><a class="text-danger"
+                                   href="{{ url_for('showcase.remove_from_cart', meal_id=meal.id) }}">Удалить</a>
                             </td>
                         </tr>
                     {% endfor %}
