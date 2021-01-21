@@ -35,7 +35,14 @@
                         </div>
                         <div class="mt-4 order-md-4 form-label-group">
                             {{ form.phone.label }}
-                            {{ form.phone(class='font-weight-bold form-control') }}
+                            {% if form.phone.errors|length > 0 %}
+                                {{ form.phone(class="font-weight-bold form-control is-invalid") }}
+                                {% for err in form.phone.errors %}
+                                    <div class="invalid-feedback">{{ err }}</div>
+                                {% endfor %}
+                            {% else %}
+                                {{ form.phone(class='font-weight-bold form-control') }}
+                            {% endif %}
                         </div>
                         {% if customer and cart_meals|length > 0 %}
                             <button type="submit" class=" mt-5 mb-5 btn btn-primary">Оформить заказ</button>

@@ -1,9 +1,15 @@
+import phonenumbers
 from flask_wtf import FlaskForm
-from wtforms import StringField
-from wtforms import validators
+from wtforms import StringField, validators, ValidationError
 from wtforms.fields.html5 import EmailField, TelField
 
-from project5.utils import phone_validate
+
+def phone_validate(form, phone_field):
+    try:
+        phone = phonenumbers.parse(phone_field.data, region='RU')
+        phone_field.data = phonenumbers.format_number(phone, phonenumbers.PhoneNumberFormat.E164)
+    except phonenumbers.NumberParseException:
+        raise ValidationError('Введите номер телефона в формате 11 цифр, например +79001234567')
 
 
 class OrderForm(FlaskForm):
