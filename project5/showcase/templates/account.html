@@ -13,9 +13,10 @@
                                     <div class="row">
                                         <div class="col-7 col-lg-9">
                                             <span class="h5 font-weight-normal">{{ order.create_dt|datetime_formatter }}</span>
-                                            <span class="alert alert-info m-2">В пути</span>
-                                            <br><br>
+                                        </div>
+                                        <div class="col-5 col-lg-9 m-2">
                                             <span class="h5">Сумма: {{ order.total }} руб</span>
+                                                <span class="badge badge-primary">в пути</span>
                                         </div>
                                     </div>
                                 </li>
