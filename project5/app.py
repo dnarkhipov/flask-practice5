@@ -4,7 +4,9 @@ from project5.extensions import db, migrate, bcrypt, admin, csrf
 from project5.settings import ProdConfig
 from project5 import showcase, customers
 
-from project5.admin.views import customers as admin_customers
+from project5.admin.views import (
+    customers as admin_customers, meals as admin_meals, categories as admin_categories, orders as admin_orders
+)
 
 
 def create_app(config_object=ProdConfig):
@@ -31,7 +33,7 @@ def register_extensions(app):
     csrf.init_app(app)
     bcrypt.init_app(app)
     admin.init_app(app)
-    admin.add_views(admin_customers)
+    admin.add_views(admin_customers, admin_categories, admin_meals, admin_orders)
 
 
 def register_blueprints(app):
