@@ -46,7 +46,7 @@ def auth():
 @blueprint.route('/logout')
 def logout():
     unset_current_customer()
-    return redirect(url_for('showcase.get_main_page'))
+    return redirect(url_for('customers.auth'))
 
 
 @blueprint.route('/register', methods=('get', 'post'))

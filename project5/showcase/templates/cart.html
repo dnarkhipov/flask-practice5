@@ -37,7 +37,7 @@
                             {{ form.phone.label }}
                             {{ form.phone(class='font-weight-bold form-control') }}
                         </div>
-                        {% if customer %}
+                        {% if customer and cart_meals|length > 0 %}
                             <button type="submit" class=" mt-5 mb-5 btn btn-primary">Оформить заказ</button>
                         {% endif %}
                     </fieldset>

@@ -108,7 +108,7 @@ def get_cart():
                 return f'Internal DBAPI error: {err}', 500
             # при успешном оформлении заказа очищаем корзину
             session['cart'] = None
-            return redirect(url_for('showcase.get_account_page'))
+            return redirect(url_for('showcase.get_ordered'))
     else:
         if customer:
             form.mail.data = customer.mail
@@ -124,6 +124,15 @@ def get_cart():
     )
 
 
+@blueprint.route('/ordered')
+def get_ordered():
+    customer = get_current_customer()
+    return render_template(
+        'ordered.html',
+        customer = customer
+    )
+
+
 @blueprint.route('/account')
 def get_account_page():
     customer = get_current_customer()
@@ -131,7 +140,7 @@ def get_account_page():
         return redirect(url_for('customers.auth'))
 
     cart_meals = Meal.query.filter(Meal.id.in_(read_session_cart())).all()
-    orders = Order.query.filter(Order.mail == customer.mail).all()
+    orders = Order.query.filter(Order.mail == customer.mail).order_by(Order.create_dt.desc()).all()
 
     return render_template(
         'account.html',
