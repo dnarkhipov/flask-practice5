@@ -130,7 +130,7 @@ def get_ordered():
     customer = get_current_customer()
     return render_template(
         'ordered.html',
-        customer = customer
+        customer=customer
     )
 
 

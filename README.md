@@ -12,3 +12,9 @@
     flask db migrate
     flask db upgrade
 
+Авторизация в интерфейсе администратора:
+
+    <ip:port>/admin
+
+    login : admin
+    password: admin
