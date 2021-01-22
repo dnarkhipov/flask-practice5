@@ -8,6 +8,9 @@ class Category(db.Model):
     title = db.Column(db.String(80), nullable=False, unique=True)
     meals = db.relationship('Meal', uselist=True, back_populates="category")
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 class Meal(db.Model):
     __tablename__ = 'meals'
@@ -19,6 +22,9 @@ class Meal(db.Model):
     picture = db.Column(db.String(80), nullable=False)
     category = db.relationship("Category", back_populates="meals")
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 order_meals = db.Table(
     'order_meals',
@@ -27,12 +33,22 @@ order_meals = db.Table(
 )
 
 
+class OrderStatus(db.Model):
+    __tablename__ = 'order_status'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+
+    def __str__(self):
+        return f'{self.name}'
+
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
+    status_id = db.Column(db.Integer, db.ForeignKey('order_status.id'), nullable=False, default=0)
+    status = db.relationship('OrderStatus')
     create_dt = db.Column(db.DateTime, nullable=False, default=datetime.now())
     total = db.Column(db.Integer, nullable=False, default=0)
-    status = db.Column(db.Integer, nullable=False, default=0)
     mail = db.Column(db.String(80), nullable=False)
     phone = db.Column(db.String(12), nullable=False)
     address = db.Column(db.String(80), nullable=False)

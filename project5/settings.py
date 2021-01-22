@@ -9,6 +9,9 @@ class Config(object):
     APP_DIR = Path(__file__).parent  # This directory
     PROJECT_ROOT = APP_DIR.parent
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    FLASK_ADMIN_SWATCH = 'cerulean'
+    BASIC_AUTH_USERNAME = 'admin'
+    BASIC_AUTH_PASSWORD = 'admin'
 
 
 class ProdConfig(Config):
